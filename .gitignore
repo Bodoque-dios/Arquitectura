@@ -17,4 +17,5 @@
 .vscode-server/
 .editorconfig
 .vscode
+.mysql_history
 output.log
