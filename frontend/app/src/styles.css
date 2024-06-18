@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+
+
+:root {
+    --primary-white: #FFFFFF;
+    --primary-purple: #343351;
+    --primary-orange: #FF8A73;
+    --primary-blue: #5681FF;
+    --light-blue: #dbe7ff;
+}
+
+html {
+    font-family: "Poppins", sans-serif;
+    font-style: normal;    
+}
