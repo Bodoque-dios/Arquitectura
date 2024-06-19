@@ -19,3 +19,4 @@
 .vscode
 .mysql_history
 output.log
+*.TMP
