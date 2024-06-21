@@ -47,9 +47,9 @@ $sql = <<<EOD
         rate FLOAT NOT NULL
     );
 
-    DELIMITER //
 
     drop procedure if exists GetFacturas;
+    
     CREATE PROCEDURE GetFacturas()
     BEGIN
         DECLARE v_factura INT;
@@ -148,9 +148,7 @@ $sql = <<<EOD
         FROM
             TempResult;
 
-    END //
-
-    DELIMITER ;
+    END ;
     EOD;
 
 if (mysqli_multi_query($conn, $sql)) {
