@@ -11,6 +11,7 @@
             <th>Orden de Compra</th>
             <th>Vigente</th>
             <th>Moneda</th>
+            <th>Factura</th>
         </tr>
     </thead>
     <tbody>
@@ -31,10 +32,11 @@
                     }
                 </td>
                 <td>{{ servicio.moneda }}</td>
+                <td>{{ servicio.facturas[0]?.factura }}</td>
             </tr>
         } @empty { 
             <tr>
-                <td colspan="9">No hay servicios</td>
+                <td colspan="10">No hay servicios</td>
             </tr>
         }
     </tbody>
