@@ -25,3 +25,13 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## TODO:
+
+- [ ] Exportar lo que se est+a viendo
+- [ ] Ingresar nuevas
+- [ ] mostral actual y 3 atras
+- [ ] sumar total facturas mensual por carrier/busqueda
+- [ ] al hacer click mostrar datos del cliente y todas las facturas
+- [ ] comentarios en los campos de la tabla como excel
+- [ ] fix dark mode

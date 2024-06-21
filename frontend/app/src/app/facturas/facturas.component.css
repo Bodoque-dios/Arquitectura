@@ -1,0 +1,30 @@
+
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100vw;
+}
+
+.si-vigente {
+    background-color: #d0efcf;
+    color: #79a779;
+    font-weight: 800;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}
+
+.no-vigente {
+    background-color: #d9afa6;
+    color: #cf6755;
+    font-weight: 800;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+}

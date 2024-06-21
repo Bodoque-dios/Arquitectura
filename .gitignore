@@ -20,3 +20,4 @@
 .mysql_history
 output.log
 *.TMP
+node_modules

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
-@tailwind utilities; */
+@tailwind utilities;
 
 
 :root {
@@ -10,6 +10,7 @@
     --primary-orange: #FF8A73;
     --primary-blue: #5681FF;
     --light-blue: #dbe7ff;
+    --primary-gray: grey;
 }
 
 html {

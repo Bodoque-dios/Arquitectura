@@ -1,0 +1,3 @@
+to see front end log
+journalctl -u start-front-end.service -f
+

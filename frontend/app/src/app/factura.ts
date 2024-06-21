@@ -14,5 +14,6 @@ export interface Servicio {
     orden_de_compra: string;
     esta_vigente: string; // o number ? o boolean?
     moneda: string;
+    count: number;
     facturas: Factura[];
 }

@@ -47,9 +47,9 @@ $sql = <<<EOD
         rate FLOAT NOT NULL
     );
 
-    DELIMITER //
 
     drop procedure if exists GetFacturas;
+    
     CREATE PROCEDURE GetFacturas()
     BEGIN
         DECLARE v_factura INT;
@@ -68,7 +68,7 @@ $sql = <<<EOD
         DECLARE cur_moneda VARCHAR(10);
         DECLARE cur_fecha DATE;
         DECLARE cur_factura INT;
-        DECLARE cur_neto INT;
+        DECLARE cur_neto DECIMAL(10, 4);
 
         DECLARE cur CURSOR FOR
             SELECT operador.nombre,
@@ -119,9 +119,9 @@ $sql = <<<EOD
             LEFT JOIN UF uf ON d.fecha = uf.fecha;
 
             IF v_tasa IS NOT NULL THEN
-                SET cur_neto = cur_factura * v_tasa;
+                SET cur_neto = cur_factura / 37314.0;
             ELSE
-                SET cur_neto = cur_factura; -- if no conversion rate is found, use the original factura
+                SET cur_neto = cur_factura / 37314.0; -- if no conversion rate is found, use the original factura
             END IF;
 
             INSERT INTO TempResult (
@@ -130,6 +130,9 @@ $sql = <<<EOD
                 cur_nombre, cur_id_operador, cur_id_servicio_orbyta, cur_cliente, cur_direccion, cur_capacidad, cur_orden_de_compra, cur_esta_vigente, cur_moneda, JSON_ARRAY(JSON_OBJECT("fecha", cur_fecha, "factura", cur_factura, "neto", cur_neto))
             ) ON DUPLICATE KEY UPDATE
             facturas = JSON_ARRAY_APPEND(facturas, '$', JSON_OBJECT("fecha", cur_fecha, "factura", cur_factura, "neto", cur_neto));
+        
+            SET cur_neto = 0;
+            SET cur_factura = 0;
         END LOOP;
 
         CLOSE cur;
@@ -148,9 +151,7 @@ $sql = <<<EOD
         FROM
             TempResult;
 
-    END //
-
-    DELIMITER ;
+    END ;
     EOD;
 
 if (mysqli_multi_query($conn, $sql)) {

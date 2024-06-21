@@ -1,6 +1,7 @@
 
 main {
-    width: 100%;
+    width: 99vw;
+    margin: 0.5rem auto;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -15,12 +16,12 @@ nav {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 600px;
-    padding: 1rem 2rem;
+    max-width: 50vw;
+    padding: 0.2rem;
 }
 
 nav a {
-    padding: 0.7rem 1rem 0.5rem 1rem;
+    padding: 0.2rem;
     text-decoration: none;
     color: var(--primary-purple);
     font-weight: 500;

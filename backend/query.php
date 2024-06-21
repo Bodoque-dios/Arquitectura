@@ -67,6 +67,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $result = $result->fetch_all(MYSQLI_ASSOC);
             foreach ($result as $key => $value) {
                 $result[$key]['facturas'] = json_decode($value['facturas']);
+                
+                $num = count($result[$key]['facturas']);
+
+                $result[$key]["count"] = $num;
+                
+                //die(var_dump(count($result[$key]['facturas'])));
+                usort($result[$key]['facturas'], function ($a, $b) {
+                    return strtotime($a->fecha) - strtotime($b->fecha);
+                });
             }
             
             echo json_encode($result);
