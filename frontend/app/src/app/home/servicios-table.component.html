@@ -1,0 +1,41 @@
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>ID Operador</th>
+            <th>ID Servicio Orbyta</th>
+            <th>Cliente</th>
+            <th>Dirección</th>
+            <th>Capacidad (mbps)</th>
+            <th>Orden de Compra</th>
+            <th>Vigente</th>
+            <th>Moneda</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (servicio of serviciosFiltrados(); track servicio){
+            <tr>
+                <td>{{ servicio.nombre }}</td>
+                <td>{{ servicio.id_operador }}</td>
+                <td>{{ servicio.id_servicio_orbyta }}</td>
+                <td>{{ servicio.cliente }}</td>
+                <td>{{ servicio.direccion }}</td>
+                <td>{{ servicio.capacidad }}</td>
+                <td>{{ servicio.orden_de_compra }}</td>
+                <td>
+                    @if (servicio.esta_vigente == '1') {
+                        <span class="si-vigente">Si</span>
+                    } @else {
+                        <span class="no-vigente">No</span>
+                    }
+                </td>
+                <td>{{ servicio.moneda }}</td>
+            </tr>
+        } @empty { 
+            <tr>
+                <td colspan="9">No hay servicios</td>
+            </tr>
+        }
+    </tbody>
+</table>
