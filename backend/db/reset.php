@@ -38,6 +38,7 @@ $sql = <<<EOD
         id_servicio INT NOT NULL,
         fecha DATE NOT NULL,
         factura INT NOT NULL,
+        neto DECIMAL(9,2) NOT NULL,
         FOREIGN KEY (id_servicio) REFERENCES servicio (id)
     );
 
@@ -68,7 +69,7 @@ $sql = <<<EOD
         DECLARE cur_moneda VARCHAR(10);
         DECLARE cur_fecha DATE;
         DECLARE cur_factura INT;
-        DECLARE cur_neto DECIMAL(10, 4);
+        DECLARE cur_neto DECIMAL(9,2);
 
         DECLARE cur CURSOR FOR
             SELECT operador.nombre,
@@ -81,7 +82,8 @@ $sql = <<<EOD
                 servicio.esta_vigente,
                 servicio.moneda,
                 cargo_mensual.fecha,
-                cargo_mensual.factura
+                cargo_mensual.factura,
+                cargo_mensual.neto
             FROM operador
                 JOIN servicio ON operador.id = servicio.id_operador
                 left JOIN cargo_mensual ON servicio.id = cargo_mensual.id_servicio;
@@ -100,28 +102,17 @@ $sql = <<<EOD
             esta_vigente BOOLEAN,
             moneda VARCHAR(10),
             facturas JSON,
-            PRIMARY KEY (id_operador, id_servicio_orbyta)
+            UNIQUE KEY unique_row (nombre, id_operador, id_servicio_orbyta, cliente, direccion, capacidad, orden_de_compra, esta_vigente, moneda)
         );
 
         OPEN cur;
 
         read_loop: LOOP
 
-            FETCH cur INTO cur_nombre, cur_id_operador, cur_id_servicio_orbyta, cur_cliente, cur_direccion, cur_capacidad, cur_orden_de_compra, cur_esta_vigente, cur_moneda, cur_fecha, cur_factura;
+            FETCH cur INTO cur_nombre, cur_id_operador, cur_id_servicio_orbyta, cur_cliente, cur_direccion, cur_capacidad, cur_orden_de_compra, cur_esta_vigente, cur_moneda, cur_fecha, cur_factura, cur_neto;
 
             IF done THEN
                 LEAVE read_loop;
-            END IF;
-
-            -- Get the conversion rate for the given date without triggering NOT FOUND
-            SELECT COALESCE(uf.rate, 1) into v_tasa
-            FROM (SELECT cur_fecha AS fecha) AS d
-            LEFT JOIN UF uf ON d.fecha = uf.fecha;
-
-            IF v_tasa IS NOT NULL THEN
-                SET cur_neto = cur_factura / 37314.0;
-            ELSE
-                SET cur_neto = cur_factura / 37314.0; -- if no conversion rate is found, use the original factura
             END IF;
 
             INSERT INTO TempResult (
@@ -131,8 +122,6 @@ $sql = <<<EOD
             ) ON DUPLICATE KEY UPDATE
             facturas = JSON_ARRAY_APPEND(facturas, '$', JSON_OBJECT("fecha", cur_fecha, "factura", cur_factura, "neto", cur_neto));
         
-            SET cur_neto = 0;
-            SET cur_factura = 0;
         END LOOP;
 
         CLOSE cur;
@@ -151,7 +140,7 @@ $sql = <<<EOD
         FROM
             TempResult;
 
-    END ;
+    END;
     EOD;
 
 if (mysqli_multi_query($conn, $sql)) {
@@ -186,6 +175,7 @@ while(($row = fgetcsv($file)) !== FALSE) {
         WHERE id_operador = '$id_operador' AND nombre = '$nombre')
     RETURNING id;";
 
+    // IF operador exists, get the id
     if (!($op_id = mysqli_fetch_assoc(mysqli_query($conn, $sql)))) {
         $op_id = mysqli_fetch_assoc(mysqli_query($conn, "SELECT id FROM operador WHERE id_operador = '$id_operador' AND nombre = '$nombre'"));
     } 
@@ -214,8 +204,8 @@ while(($row = fgetcsv($file)) !== FALSE) {
 
     $sql = "SELECT LAST_INSERT_ID() AS id;";
 
-    $serv_id = mysqli_fetch_assoc( mysqli_query($conn, $sql));
-    $serv_id = $serv_id['id'];
+    $servicio_id = mysqli_fetch_assoc( mysqli_query($conn, $sql));
+    $servicio_id = $servicio_id['id'];
 
     $facturas = array();
     $netos = array();
@@ -225,9 +215,10 @@ while(($row = fgetcsv($file)) !== FALSE) {
     for ($i = 9; $i < count($row); $i += 2) {
 
         $factura = $row[$i]== "" ? 0 : $row[$i];
+        $neto = $row[$i + 1] == "" ? 0 : $row[$i + 1];
 
-        $sql = "INSERT INTO cargo_mensual (id_servicio, fecha, factura)
-            VALUES ($serv_id, '$fecha', $factura);";
+        $sql = "INSERT INTO cargo_mensual (id_servicio, fecha, factura, neto)
+            VALUES ($servicio_id, '$fecha', $factura, $neto);";
         mysqli_query($conn, $sql);
         mysqli_error($conn);
         $fecha = date('Y-m-d', strtotime($fecha . ' + 1 month'));

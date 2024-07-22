@@ -5,14 +5,8 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet],
-  styleUrl: './app.component.css',
   template: `
     <main>
-      <nav>
-        <a href="/">Facturas</a>
-        <a href="/user">Clientes</a>
-        <a href="/user">Opciones</a>
-      </nav>
       <router-outlet />
     </main>
   `,

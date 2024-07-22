@@ -1,0 +1,114 @@
+<div
+	id="editUserModal"
+	tabindex="-1"
+	class="fixed left-0 right-0 top-0 z-50 h-[calc(100%-1rem)] max-h-full w-full items-center justify-center overflow-y-hidden overflow-x-hidden p-4 md:inset-0"
+>
+	<div (click)="close()" class="fixed inset-0 bg-gray-500 bg-opacity-85 transition-opacity"></div>
+	<div class="relative m-auto flex max-h-full w-full justify-center">
+		<!-- Modal content -->
+		<form class="relative m-auto h-[calc(90vh-1rem)] w-[95vw] rounded-lg bg-white shadow dark:bg-gray-700">
+			<!-- Modal header -->
+			<div class="flex items-start justify-between rounded-t border-b p-4 dark:border-gray-600">
+				<h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    Resumen de Servicio
+                </h3>
+				<button
+                title="cerrar"
+					(click)="close()"
+					type="button"
+					class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+				>
+					<svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+						<path
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+						/>
+					</svg>
+					<span class="sr-only">cerrar</span>
+				</button>
+			</div>
+			<!-- Modal body -->
+			<div class="space-y-4 p-6">
+				<table class="over w-full text-center text-sm mb-4">
+					<thead>
+						<tr class="text-center">
+							<th>Operador</th>
+							<th>ID Operador</th>
+							<th>ID Servicio</th>
+							<th>Cliente</th>
+							<th>Dirección</th>
+							<th>Capacidad (mbps)</th>
+							<th>Orden de Compra</th>
+							<th>Vigente</th>
+							<th>Moneda</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="p-2">{{ data?.nombre }}</td>
+							<td class="p-2">{{ data?.id_operador }}</td>
+							<td class="p-2">{{ data?.id_servicio_orbyta }}</td>
+							<td class="p-2">{{ data?.cliente }}</td>
+							<td class="p-2">{{ data?.direccion }}</td>
+							<td class="p-2">{{ data?.capacidad }}</td>
+							<td class="p-2">{{ data?.orden_de_compra }}</td>
+							<td class="max-w-40 overflow-hidden p-2">
+								<span *ngIf="data?.esta_vigente == '1'" class="si-vigente">Si</span>
+								<span *ngIf="data?.esta_vigente != '1'" class="no-vigente">No</span>
+							</td>
+							<td class="p-2">{{ data?.moneda }}</td>
+						</tr>
+					</tbody>
+				</table>
+                <hr>
+                <div class="overflow-x-auto overflow-y-hidden">
+                    <table class="min-w-full text-center text-sm">
+                        <thead>
+                            <tr>
+                                <ng-container *ngFor="let date of data?.facturas?.reverse()">
+                                    <th colspan="2">{{date?.fecha}}</th>
+                                </ng-container>
+                            </tr>
+                            <tr>
+                                <ng-container *ngFor="let date of data?.facturas?.reverse()">
+                                    <th>Factura</th>
+                                    <th>Neto</th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <ng-container *ngFor="let f of data?.facturas?.reverse()">
+                                    <td class="p-2" >{{ f?.factura }}</td>
+                                    <td class="p-2" >{{ f?.neto }}</td>
+                                </ng-container>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7EoayJQK6zIaRD0g5nj71My84MZzVDfi20g&s" 
+                alt=""
+                    class="w-full h-20 object-cover object-center"
+                >
+
+                
+                                
+			</div>
+			<!-- Modal footer -->
+			<div
+				class="flex items-center space-x-3 rounded-b border-t border-gray-200 p-6 rtl:space-x-reverse dark:border-gray-600"
+			>
+				<button
+					type="submit"
+					class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+				>
+					Guardar
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
